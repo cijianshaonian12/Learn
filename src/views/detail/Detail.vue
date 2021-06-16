@@ -15,7 +15,7 @@
       <!-- <detail-recommend-info :recommendList="recommendList"></detail-recommend-info> -->
     </scroll>
     <back-top @click.native="goTop"  v-show="isShow" ></back-top>
-    <detail-bottom-bar></detail-bottom-bar>
+    <detail-bottom-bar @addCart="addCart"></detail-bottom-bar>
   </div>
 </template>
 
@@ -216,6 +216,19 @@
                 console.log(position)
                 this.isShow = -(position.y) > 1000
             },
+            addCart() {
+                console.log("添加购物车")
+                    // 1.创建对象
+                const obj = {}
+                    // 2.对象信息
+                obj.iid = this.deid;
+                obj.imgURL = this.topImages[0]
+                obj.title = this.goods.title
+                obj.desc = this.goods.desc;
+                obj.newPrice = this.goods.nowPrice;
+                // 3.添加到Store中
+                this.$store.commit('addCart', obj)
+            }
         },
     };
 </script>
