@@ -1,0 +1,190 @@
+<template>
+  <div class="detail">
+    <detail-item @ImageLoad="ImageLoad"  @ImageClick="ImageClick"></detail-item>
+    <scroll class="scrollstyle" ref="scroll">
+      <detail-swiper :top-images="topImages"></detail-swiper>
+      <detail-base-info :goods="goods"></detail-base-info>
+      <detail-shop-info :shop="shop"></detail-shop-info>
+      <detail-goods-info
+        :detailInfo="detailInfo"
+        @imageLoad="goodLaod"
+      ></detail-goods-info>
+      <detail-param-info :paramInfo="paramInfo" ref="params"></detail-param-info>
+      <detail-comment-info :comment-info="commentInfo" ref="comment"></detail-comment-info>
+      <good-list :goods="recommendList" ref="recomend"></good-list>
+      <!-- <detail-recommend-info :recommendList="recommendList"></detail-recommend-info> -->
+    </scroll>
+  </div>
+</template>
+
+<script>
+    import DetailItem from "views/detail/childComps/DetailItem";
+    import DetailSwiper from "views/detail/childComps/DetailSwiper";
+    import {
+        getDetail,
+        getRecommend,
+        Goods,
+        Shop,
+        GoodsParam,
+    } from "network/detail";
+    import DetailBaseInfo from "views/detail/childComps/DetailBaseInfo";
+    import DetailShopInfo from "views/detail/childComps/DetailShopInfo";
+    import DetailGoodsInfo from "views/detail/childComps/DetailGoodsInfo";
+    import DetailParamInfo from "views/detail/childComps/DetailParamInfo";
+    import Scroll from "common/scroll/Scroll";
+    import DetailCommentInfo from "views/detail/childComps/DetailCommentInfo";
+    import GoodList from "content/goods/GoodList";
+    import {
+        backTopMixin
+    } from "@/commons/mixin";
+    // import { debounce } from "@/commons/utils";
+    // import DetailRecommendInfo from 'views/detail/childComps/DetailRecommendInfo'
+    export default {
+        name: "Detail",
+        mixins: [backTopMixin],
+        data() {
+            return {
+                deid: null,
+                topImages: [],
+                goods: {},
+                shop: {},
+                detailInfo: {},
+                paramInfo: {},
+                commentInfo: {},
+                recommendList: [],
+                TopNavY: []
+            };
+        },
+        components: {
+            DetailItem,
+            DetailSwiper,
+            DetailBaseInfo,
+            DetailShopInfo,
+            Scroll,
+            DetailGoodsInfo,
+            DetailParamInfo,
+            DetailCommentInfo,
+            GoodList,
+            // DetailRecommendInfo
+        },
+
+        created() {
+            this.deid = this.$route.params.deid;
+            console.log(this.deid);
+
+            getDetail(this.deid).then((res) => {
+                console.log(res);
+                const data = res.result;
+                this.topImages = data.itemInfo.topImages;
+                // 2.获取商品信息
+                this.goods = new Goods(
+                    data.itemInfo,
+                    data.columns,
+                    data.shopInfo.services
+                );
+
+                // 3.创建店铺信息的对象
+                this.shop = new Shop(data.shopInfo);
+
+                // 4.保存商品的详情数据
+                this.detailInfo = data.detailInfo;
+                // 5.获取参数的信息
+                this.paramInfo = new GoodsParam(
+                    data.itemParams.info,
+                    data.itemParams.rule
+                );
+
+                // 2.7.保存评论信息
+                if (data.rate.list) {
+                    this.commentInfo = data.rate.list[0];
+                }
+            });
+
+            getRecommend().then((res, error) => {
+                console.log("我是", res);
+                if (error) return;
+                this.recommendList = res.data.list;
+            });
+
+
+            this.$nextTick(() => {
+                console.log("nextTick")
+                this.TopNavY = []
+                this.TopNavY.push(0)
+                this.TopNavY.push(this.$refs.params.$el.offsetTop)
+                this.TopNavY.push(this.$refs.comment.$el.offsetTop)
+                this.TopNavY.push(this.$refs.recomend.$el.offsetTop)
+
+
+            })
+
+        },
+        mounted() {
+            // 下面加入了防抖函数
+            // const refreshs = debounce(this.$refs.scroll.refreashScroll, 5);
+            // // 下面的方法修改，下面的简单写法
+            // // this.$bus.$on("itemImageload", () => {
+            // //     console.log("$bus测试");
+            // //     refreshs();
+            // //     console.log("montend加载", this.$refs.tabcontroll2.$el.offsetTop)
+            // // })
+            // this.ImageLesean = () => {
+            //   console.log("$bus测试");
+            //   refreshs();
+            //   console.log("montend加载", this.$refs.tabcontroll2.$el.offsetTop);
+            // };
+
+            // this.$bus.$on("itemImageload", this.ImageLesean);
+        },
+
+        methods: {
+            goodLaod() {
+                this.$refs.scroll.refreashScroll();
+            },
+            ImageLoad() {
+                this.refreshsImage();
+            },
+            ImageClick(index) {
+                console.log(index);
+                console.log("我在搞什么", this.TopNavY[index])
+                    // this.$refs.scroll.scrollTo(0, -this.TopNavY[index], 300)
+                    // this.$refs.scroll.scroll.scrollTo(0, -this.TopNavY[index], 300)
+                console.log("wq", this.$refs.params.$el.offsetTop)
+                console.log(this.$refs.comment.$el.offsetTop)
+                console.log(this.$refs.recomend.$el.offsetTop)
+                console.log(index)
+                switch (index) {
+                    case 0:
+                        this.$refs.scroll.scroll.scrollTo(0, 0, 300)
+                        break;
+                    case 1:
+                        this.$refs.scroll.scroll.scrollTo(0, -this.$refs.params.$el.offsetTop, 300)
+                        break;
+                    case 2:
+                        this.$refs.scroll.scroll.scrollTo(0, -this.$refs.comment.$el.offsetTop, 300)
+                        break;
+                    case 3:
+                        this.$refs.scroll.scroll.scrollTo(0, -this.$refs.recomend.$el.offsetTop, 300)
+                        break;
+                }
+
+
+            }
+        },
+    };
+</script>
+
+<style scoped>
+    .detail {
+        height: 100vh;
+        background-color: #fff;
+        position: relative;
+        z-index: 9;
+    }
+    
+    .scrollstyle {
+        height: calc(100%-44px);
+        overflow: hidden;
+        background-color: #fff;
+    }
+</style>
