@@ -14,6 +14,7 @@
       <good-list :goods="recommendList" ref="recomend"></good-list>
       <!-- <detail-recommend-info :recommendList="recommendList"></detail-recommend-info> -->
     </scroll>
+    <back-top @click.native="goTop"  v-show="isShow" ></back-top>
     <detail-bottom-bar></detail-bottom-bar>
   </div>
 </template>
@@ -36,6 +37,7 @@
     import DetailCommentInfo from "views/detail/childComps/DetailCommentInfo";
     import DetailBottomBar from "views/detail/childComps/DetailBottomBar";
     import GoodList from "content/goods/GoodList";
+    import backTop from 'content/backTop/backTop';
     import {
         backTopMixin
     } from "@/commons/mixin";
@@ -55,7 +57,8 @@
                 commentInfo: {},
                 recommendList: [],
                 TopNavY: [],
-                courentIndex: 0
+                courentIndex: 0,
+                isShow: false
             };
         },
         components: {
@@ -68,7 +71,8 @@
             DetailParamInfo,
             DetailCommentInfo,
             GoodList,
-            DetailBottomBar
+            DetailBottomBar,
+            backTop
             // DetailRecommendInfo
         },
 
@@ -203,10 +207,15 @@
 
                 }
 
-
-
-
-            }
+            },
+            goTop() {
+                this.$refs.scroll.scrollTo(0, 0, 300)
+                console.log("点击")
+            },
+            showTab(position) {
+                console.log(position)
+                this.isShow = -(position.y) > 1000
+            },
         },
     };
 </script>
