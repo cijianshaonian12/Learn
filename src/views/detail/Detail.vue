@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
-    <detail-item @ImageLoad="ImageLoad"  @ImageClick="ImageClick"></detail-item>
-    <scroll class="scrollstyle" ref="scroll">
+    <detail-item @ImageLoad="ImageLoad"  @ImageClick="ImageClick" ref="navbar"></detail-item>
+    <scroll class="scrollstyle" ref="scroll" :probe-types="3" @showTab="showTab">
       <detail-swiper :top-images="topImages"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
@@ -52,7 +52,8 @@
                 paramInfo: {},
                 commentInfo: {},
                 recommendList: [],
-                TopNavY: []
+                TopNavY: [],
+                courentIndex: 0
             };
         },
         components: {
@@ -107,16 +108,16 @@
             });
 
 
-            this.$nextTick(() => {
-                console.log("nextTick")
-                this.TopNavY = []
-                this.TopNavY.push(0)
-                this.TopNavY.push(this.$refs.params.$el.offsetTop)
-                this.TopNavY.push(this.$refs.comment.$el.offsetTop)
-                this.TopNavY.push(this.$refs.recomend.$el.offsetTop)
+            // this.$nextTick(() => {
+            //     console.log("nextTick")
+            //     this.TopNavY = []
+            //     this.TopNavY.push(0)
+            //     this.TopNavY.push(this.$refs.params.$el.offsetTop)
+            //     this.TopNavY.push(this.$refs.comment.$el.offsetTop)
+            //     this.TopNavY.push(this.$refs.recomend.$el.offsetTop)
 
 
-            })
+            // })
 
         },
         mounted() {
@@ -135,6 +136,9 @@
             // };
 
             // this.$bus.$on("itemImageload", this.ImageLesean);
+
+
+
         },
 
         methods: {
@@ -143,6 +147,10 @@
             },
             ImageLoad() {
                 this.refreshsImage();
+
+                //     console.log("nextTick")
+
+
             },
             ImageClick(index) {
                 console.log(index);
@@ -167,6 +175,32 @@
                         this.$refs.scroll.scroll.scrollTo(0, -this.$refs.recomend.$el.offsetTop, 300)
                         break;
                 }
+
+
+
+            },
+            showTab(position) {
+                this.TopNavY = []
+                this.TopNavY.push(0)
+                this.TopNavY.push(this.$refs.params.$el.offsetTop)
+                this.TopNavY.push(this.$refs.comment.$el.offsetTop)
+                this.TopNavY.push(this.$refs.recomend.$el.offsetTop)
+                    // console.log("测试", position)
+                let PostionY = -position.y;
+                let length = this.TopNavY.length;
+                // console.log("测试2", PostionY)
+                for (let i = 0; i < this.TopNavY.length; i++) {
+                    // console.log("测试3", this.TopNavY)
+                    if ((this.courentIndex !== i) && ((length - 1 > i && PostionY > this.TopNavY[parseInt(i)] && PostionY < this.TopNavY[i + 1]) || length - 1 === i && PostionY > this.TopNavY[parseInt(i)])) {
+
+                        this.courentIndex = i;
+                        console.log("编号", this.courentIndex)
+                        this.$refs.navbar.currentIndex = this.courentIndex;
+                    }
+
+                }
+
+
 
 
             }
