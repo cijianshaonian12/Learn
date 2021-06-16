@@ -14,6 +14,7 @@
       <good-list :goods="recommendList" ref="recomend"></good-list>
       <!-- <detail-recommend-info :recommendList="recommendList"></detail-recommend-info> -->
     </scroll>
+    <detail-bottom-bar></detail-bottom-bar>
   </div>
 </template>
 
@@ -33,6 +34,7 @@
     import DetailParamInfo from "views/detail/childComps/DetailParamInfo";
     import Scroll from "common/scroll/Scroll";
     import DetailCommentInfo from "views/detail/childComps/DetailCommentInfo";
+    import DetailBottomBar from "views/detail/childComps/DetailBottomBar";
     import GoodList from "content/goods/GoodList";
     import {
         backTopMixin
@@ -66,6 +68,7 @@
             DetailParamInfo,
             DetailCommentInfo,
             GoodList,
+            DetailBottomBar
             // DetailRecommendInfo
         },
 
