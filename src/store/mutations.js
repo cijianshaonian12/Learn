@@ -1,4 +1,5 @@
 import { ADD_COUNTER, ADD_TO_CART } from './mutation-types'
+
 export default {
     // // 一般mutations不做逻辑处理，一般放在action中处理，通过调用action修改state状态
     // addCart(state, payload) {
@@ -27,10 +28,19 @@ export default {
     // }
 
 
+
     [ADD_COUNTER](state, payload) {
         payload.count++;
     },
     [ADD_TO_CART](state, payload) {
+
         state.cartList.push(payload)
     }
+    // addCount(state, payload) {
+    //     payload.count++;
+    // },
+    // addToCart(state, payload) {
+
+    //     state.cartList.push(payload)
+    // }
 }

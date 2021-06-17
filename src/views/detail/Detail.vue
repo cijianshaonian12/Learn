@@ -231,6 +231,7 @@
 
                 // 这是在action中设置方法
                 this.$store.dispatch('addCart', obj)
+                this.$router.push("/cart")
             }
         },
     };
