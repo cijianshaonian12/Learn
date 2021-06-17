@@ -1,4 +1,5 @@
 import { ADD_COUNTER, ADD_TO_CART } from './mutation-types'
+
 export default {
 
     addCart(context, payload) {
@@ -20,6 +21,7 @@ export default {
 
         // let oldproduct = state.cartList.find(item => item.iid === payload.iid)
 
+
         // 判断oldproduct
         if (oldproduct) {
             context.commit(ADD_COUNTER, oldproduct)
@@ -27,7 +29,18 @@ export default {
         } else {
             payload.count = 1;
             context.commit(ADD_TO_CART, payload)
-                // context.state.cartList.push(payload)
+
+
+
+
+            // // 判断oldproduct
+            // if (oldproduct) {
+            //     context.commit("addCount", oldproduct)
+            //         // oldproduct.count += 1
+            // } else {
+            //     payload.count = 1;
+            //     context.commit('addToCart', payload)
+            // context.state.cartList.push(payload)
         }
 
     }
