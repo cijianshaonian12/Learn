@@ -8,6 +8,7 @@ export default new Vuex.Store({
         cartList: []
     },
     mutations: {
+
         // // 一般mutations不做逻辑处理，一般放在action中处理，通过调用action修改state状态
         // addCart(state, payload) {
         //     // 下面的是旧版本可行
@@ -47,6 +48,9 @@ export default new Vuex.Store({
     actions: {
 
         addCart(context, payload) {
+
+
+
             // 下面的是旧版本可行
             //payload新添加的商品
             // let oldproduct = null;
@@ -57,7 +61,11 @@ export default new Vuex.Store({
             // }
 
             // 下面的版本也可行
+
             let oldproduct = context.state.cartList.find(item => item.iid === payload.iid)
+
+            // let oldproduct = state.cartList.find(item => item.iid === payload.iid)
+
 
 
 
