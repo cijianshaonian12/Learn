@@ -226,8 +226,11 @@
                 obj.title = this.goods.title
                 obj.desc = this.goods.desc;
                 obj.newPrice = this.goods.nowPrice;
-                // 3.添加到Store中
-                this.$store.commit('addCart', obj)
+                // 3.添加到Store中,这个是在mutation种设置方法
+                // this.$store.commit('addCart', obj)
+
+                // 这是在action中设置方法
+                this.$store.dispatch('addCart', obj)
             }
         },
     };
