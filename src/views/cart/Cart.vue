@@ -1,15 +1,17 @@
 <template>
-  <div>
+  <div class="cart">
     <nav-bar class="home-navbar">
       <!-- <div slot="center">购物车({{cartCount}})</div> -->
       <div slot="center">购物车({{length}})</div>
     </nav-bar>
+    <car-list></car-list>
 购物车
   </div>
 </template>
 
 <script>
     import NavBar from "common/navbar/NavBar";
+    import carList from "views/cart/childComps/CartList";
     import {
         mapGetters
     } from 'vuex';
@@ -19,7 +21,8 @@
             return {};
         },
         components: {
-            NavBar
+            NavBar,
+            carList
         },
         computed: {
 
@@ -43,13 +46,12 @@
 </script>
 
 <style scoped>
+    .cart {
+        height: 100vh;
+    }
+    
     .home-navbar {
         background-color: var(--color-tint);
         color: #fff;
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-        z-index: 9;
     }
 </style>
